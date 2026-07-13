@@ -1,0 +1,64 @@
+docker compose down -v
+docker compose up --build
+
+# 🚀 RechargeNova - Microservices Project
+
+## 📌 Overview
+
+RechargeNova is a **Spring Boot microservices-based recharge system** using Docker, Eureka, API Gateway, and RabbitMQ. It simulates a telecom recharge workflow with distributed services.
+
+---
+
+## 🏗️ Services
+
+* **Eureka Server** – Service discovery
+* **API Gateway** – Request routing
+* **User Service** – User validation
+* **Operator Service** – Operator data
+* **Recharge Service** – Core logic
+* **Payment Service** – Transaction handling
+* **Notification Service** – Async notifications (RabbitMQ)
+
+---
+
+## 🔄 Flow
+
+1. Client → API Gateway
+2. Gateway → Recharge Service
+3. Recharge → User Service + Operator Service
+4. Recharge → Payment Service
+5. Payment → DB + RabbitMQ
+6. Notification Service → consumes message
+7. Response returned to client
+
+---
+
+## 🐳 Run with Docker
+
+```bash
+docker-compose up --build
+```
+
+---
+
+## 🧪 Testing
+
+* JUnit 5 + Mockito
+* Service layer tested (RechargeService)
+* Feign clients & repository mocked
+
+---
+
+## 🛠️ Tech Stack
+
+* Java 17, Spring Boot
+* Spring Cloud (Eureka, Gateway, Feign)
+* Oracle DB, RabbitMQ
+* Docker
+* JUnit & Mockito
+
+---
+
+## 👨‍💻 Author
+
+Dikshya Runuwal

@@ -1,0 +1,202 @@
+version: '3.8'
+
+services:
+
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: rechargehub
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+
+  redis:
+    image: redis:7.0-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  eureka-server:
+    build: ./eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      - EUREKA_SERVER_URL=${EUREKA_SERVER_URL}
+
+  gateway-service:
+    build: ./gatewayservice
+    ports:
+      - "8989:8989"
+    environment:
+      - EUREKA_SERVER_URL=${EUREKA_SERVER_URL}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - eureka-server
+      - zipkin
+
+  user-service:
+    build: ./user-service
+    ports:
+      - "8082:8082"
+    environment:
+      - MYSQL_HOST=mysql-db
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - EUREKA_SERVER_URL=${EUREKA_SERVER_URL}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+      - SPRING_DATA_REDIS_HOST=redis
+    depends_on:
+      - mysql-db
+      - eureka-server
+      - zipkin
+      - redis
+
+  operator-service:
+    build: ./operator-service
+    ports:
+      - "8083:8083"
+    environment:
+      - MYSQL_HOST=mysql-db
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - EUREKA_SERVER_URL=${EUREKA_SERVER_URL}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+      - SPRING_DATA_REDIS_HOST=redis
+    depends_on:
+      - mysql-db
+      - eureka-server
+      - zipkin
+      - redis
+
+  payment-service:
+    build: ./payment-service
+    ports:
+      - "8084:8084"
+    environment:
+      - MYSQL_HOST=mysql-db
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - EUREKA_SERVER_URL=${EUREKA_SERVER_URL}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
+    depends_on:
+      - mysql-db
+      - rabbitmq
+      - eureka-server
+      - zipkin
+
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "8085:8085"
+    environment:
+      - MYSQL_HOST=mysql-db
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SPRING_MAIL_HOST=smtp.gmail.com
+      - SPRING_MAIL_PORT=587
+      - SPRING_MAIL_USERNAME=${SMTP_USERNAME}
+      - SPRING_MAIL_PASSWORD=${SMTP_PASSWORD}
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_REQUIRED=true
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST=smtp.gmail.com
+      - EUREKA_SERVER_URL=${EUREKA_SERVER_URL}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+    depends_on:
+      - rabbitmq
+      - eureka-server
+      - zipkin
+      - mysql-db
+
+  recharge-service:
+    build: ./recharge-service
+    ports:
+      - "8086:8086"
+    environment:
+      - MYSQL_HOST=mysql-db
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - EUREKA_SERVER_URL=${EUREKA_SERVER_URL}
+      - ZIPKIN_URL=${ZIPKIN_URL}
+    depends_on:
+      - mysql-db
+      - eureka-server
+      - user-service
+      - operator-service
+      - payment-service
+      - zipkin
+
+
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - "1025:1025" # SMTP server
+      - "8025:8025" # Web UI
+
+  # ✅ OBSERVABILITY: PROMETHEUS
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - user-service
+      - recharge-service
+      - gateway-service
+
+  # ✅ OBSERVABILITY: GRAFANA
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+
+  # ✅ AI CHATBOT SERVICE
+  chatbot-service:
+    build: ../Chatbot-code/ollama_rag_app
+    container_name: chatbot-service
+    ports:
+      - "8000:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - OLLAMA_URL=http://host.docker.internal:11434/api/generate
+      - OLLAMA_MODEL=llama3.2:1b
+
+volumes:
+  mysql-data:

@@ -1,0 +1,28 @@
+/** ================================================================
+ * AUTHOR  : Dikshya Runuwal
+ * CLASS   : AuthResponse
+ * DESCRIPTION:
+ *   DTO representing the authentication response returned after
+ *   a successful login. Contains the JWT token and user profile
+ *   data for the client to use in subsequent authenticated requests.
+ * ================================================================ */
+package com.capg.RechargeHub.dto;
+
+public class AuthResponse {
+
+    private String token;
+    private UserResponse user;
+
+    public AuthResponse() {}
+
+    public AuthResponse(String token, UserResponse user) {
+        this.token = token;
+        this.user = user;
+    }
+
+    public String getToken() { return token; }
+    public UserResponse getUser() { return user; }
+
+    public void setToken(String token) { this.token = token; }
+    public void setUser(UserResponse user) { this.user = user; }
+}

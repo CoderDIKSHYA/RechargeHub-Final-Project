@@ -1,0 +1,81 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: notification-service
+
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:mysql-db}:3306/${MYSQL_DB:rechargerhub_notifications}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+
+  mail:
+    host: ${SPRING_MAIL_HOST:smtp.gmail.com}
+    port: ${SPRING_MAIL_PORT:587}
+    username: ${SPRING_MAIL_USERNAME}
+    password: ${SPRING_MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            trust: smtp.gmail.com
+
+# ✅ IMPORTANT: ACTUATOR + ZIPKIN CONFIG
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"   # 🔥 REQUIRED
+
+  tracing:
+    sampling:
+      probability: 1.0
+
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL:http://zipkin:9411}/api/v2/spans
+
+# ✅ EUREKA
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://eureka-server:8761/eureka/}
+
+  instance:
+    prefer-ip-address: true
+
+
+# ✅ LOGGING FOR TRACE (VERY IMPORTANT)
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+
+  pattern:
+    level: "%5p [${spring.application.name},%X{traceId},%X{spanId}]"
+
+
+
+# ✅ SWAGGER PATH CONFIG (FOR GATEWAY AGGREGATION)
+
+springdoc:
+  api-docs:
+    path: /api/notifications/v3/api-docs

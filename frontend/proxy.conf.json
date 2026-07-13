@@ -1,0 +1,27 @@
+{
+  "/users": {
+    "target": "http://localhost:8989",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/operators": {
+    "target": "http://localhost:8989",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/recharges": {
+    "target": "http://localhost:8989",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/api/payments": {
+    "target": "http://localhost:8989",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/api/notifications": {
+    "target": "http://localhost:8989",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

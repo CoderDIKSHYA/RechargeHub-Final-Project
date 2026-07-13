@@ -1,0 +1,45 @@
+================================================================
+RECHARGEHUB CUSTOMER SUPPORT KNOWLEDGE BASE
+================================================================
+
+ABOUT RECHARGEHUB:
+RechargeHub is a premium digital portal for mobile recharges. We support multiple operators including Airtel, Jio, and Vodafone Idea (Vi).
+
+SUPPORTED OPERATORS:
+1. Airtel: Known for high-speed 4G/5G data and extensive coverage.
+2. Jio: Offers affordable data plans and true 5G experience.
+3. Vi (Vodafone Idea): Provides unique night data benefits and weekend rollover.
+
+RECHARGE PLANS:
+- Unlimited Talktime: Most plans include unlimited local and STD calls.
+- Data Add-ons: If you run out of daily data, you can buy 1GB, 2GB, or 5GB boosters.
+- Validity: Plans range from 24 days to 365 days.
+
+PAYMENT OPTIONS:
+We use Razorpay for secure transactions. You can pay via:
+- UPI (Google Pay, PhonePe, Paytm)
+- Credit/Debit Cards
+- Net Banking
+
+REFUND POLICY:
+- If a recharge fails but money is deducted, it will be refunded automatically within 5-7 working days.
+- If a recharge is successful but not reflecting on your phone, please wait for 30 minutes before contacting support.
+
+HOW TO RECHARGE:
+1. Enter your 10-digit mobile number.
+2. Select your operator and circle.
+3. Choose a plan from the list.
+4. Complete the payment via Razorpay.
+
+ADMIN PORTAL:
+Admins can manage users, view all transactions, and update operator details through the dedicated Admin Dashboard.
+
+TECHNICAL STACK:
+- Frontend: Angular 18 (Midnight Symphony UI)
+- Backend: Spring Boot Microservices
+- Security: JWT Authentication
+- Database: MySQL
+- Communication: RabbitMQ and Feign Clients
+
+CONTACT SUPPORT:
+For further assistance, email us at support@rechargehub.com or call our toll-free number 1800-XXX-XXXX.

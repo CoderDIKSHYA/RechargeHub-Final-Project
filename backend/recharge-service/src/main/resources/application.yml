@@ -1,0 +1,90 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: recharge-service
+
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:mysql-db}:3306/${MYSQL_DB:rechargerhub_recharges}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+
+# ✅ ACTUATOR + ZIPKIN CONFIG (IMPORTANT)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"   # 🔥 REQUIRED
+
+  tracing:
+    sampling:
+      probability: 1.0
+
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL:http://zipkin:9411}/api/v2/spans
+
+# ✅ RESILIENCE4J CONFIG
+resilience4j:
+  circuitbreaker:
+    instances:
+      paymentServiceCB:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+      userServiceCB:
+        registerHealthIndicator: true
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+      operatorServiceCB:
+        registerHealthIndicator: true
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+  retry:
+    instances:
+      paymentRetry:
+        maxAttempts: 3
+        waitDuration: 2s
+        retryExceptions:
+          - feign.RetryableException
+          - java.util.concurrent.TimeoutException
+  timelimiter:
+    instances:
+      paymentServiceCB:
+        timeoutDuration: 10s
+
+# ✅ EUREKA CONFIG
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://eureka-server:8761/eureka/}
+
+  instance:
+    prefer-ip-address: true
+
+
+# ✅ LOGGING FOR TRACE
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+
+  pattern:
+    level: "%5p [${spring.application.name},%X{traceId},%X{spanId}]"
+
+# ✅ SWAGGER PATH CONFIG (FOR GATEWAY AGGREGATION)
+springdoc:
+  api-docs:
+    path: /recharges/v3/api-docs

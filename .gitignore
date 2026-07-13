@@ -1,0 +1,7 @@
+/.metadata/
+/.sonarlint/
+/.vscode/
+*.class
+target/
+*.log
+.env

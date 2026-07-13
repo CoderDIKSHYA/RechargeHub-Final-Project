@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} %-5level %c - %msg%n</Property>
+        <Property name="APP_NAME">payment-service</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+
+        <!-- Structured JSON Logging -->
+        <RollingFile name="RollingFile" fileName="logs/${APP_NAME}.log"
+                     filePattern="logs/${APP_NAME}-%d{yyyy-MM-dd}-%i.log.gz">
+            <JsonLayout complete="false" compact="true" eventEol="true" properties="true" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+
+        <Logger name="com.capg.RechargeHub" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+
+        <Logger name="org.springframework" level="warn"/>
+        <Logger name="org.hibernate" level="warn"/>
+    </Loggers>
+
+</Configuration>
