@@ -1,12 +1,12 @@
 services:
-  # 1. Redis Cache Service
-  - type: redis
+  # 1. Redis Cache Service (Key-Value)
+  - type: keyvalue
     name: redis
     plan: free
     ipAllowList: [] # Access restricted only to internal services
 
   # 2. Zipkin Tracing Service
-  - type: private
+  - type: pserv
     name: zipkin
     env: image
     image: openzipkin/zipkin:latest
@@ -14,7 +14,7 @@ services:
     port: 9411
 
   # 3. Eureka Discovery Server
-  - type: private
+  - type: pserv
     name: eureka-server
     env: docker
     dockerContext: backend/eureka-server
@@ -42,7 +42,7 @@ services:
         sync: false # Set in Render Dashboard
 
   # 5. User Service
-  - type: private
+  - type: pserv
     name: user-service
     env: docker
     dockerContext: backend/user-service
@@ -59,12 +59,12 @@ services:
       - key: SPRING_DATA_REDIS_HOST
         fromService:
           name: redis
-          type: redis
+          type: keyvalue
           property: host
       - key: SPRING_DATA_REDIS_PORT
         fromService:
           name: redis
-          type: redis
+          type: keyvalue
           property: port
       - key: EUREKA_SERVER_URL
         value: http://eureka-server:8761/eureka/
@@ -78,7 +78,7 @@ services:
         sync: false # Set in Render Dashboard
 
   # 6. Operator Service
-  - type: private
+  - type: pserv
     name: operator-service
     env: docker
     dockerContext: backend/operator-service
@@ -95,12 +95,12 @@ services:
       - key: SPRING_DATA_REDIS_HOST
         fromService:
           name: redis
-          type: redis
+          type: keyvalue
           property: host
       - key: SPRING_DATA_REDIS_PORT
         fromService:
           name: redis
-          type: redis
+          type: keyvalue
           property: port
       - key: EUREKA_SERVER_URL
         value: http://eureka-server:8761/eureka/
@@ -114,7 +114,7 @@ services:
         sync: false # Set in Render Dashboard
 
   # 7. Payment Service
-  - type: private
+  - type: pserv
     name: payment-service
     env: docker
     dockerContext: backend/payment-service
@@ -148,7 +148,7 @@ services:
         sync: false # Set in Render Dashboard
 
   # 8. Notification Service
-  - type: private
+  - type: pserv
     name: notification-service
     env: docker
     dockerContext: backend/notification-service
@@ -182,7 +182,7 @@ services:
         sync: false # Set in Render Dashboard (your Gmail App Password)
 
   # 9. Recharge Service
-  - type: private
+  - type: pserv
     name: recharge-service
     env: docker
     dockerContext: backend/recharge-service
