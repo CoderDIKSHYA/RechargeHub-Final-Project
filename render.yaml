@@ -1,4 +1,4 @@
-envGroups:
+envVarGroups:
   - name: rechargehub-shared-env
     envVars:
       - key: SPRING_DATASOURCE_PASSWORD
