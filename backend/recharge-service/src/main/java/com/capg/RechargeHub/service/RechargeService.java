@@ -60,14 +60,14 @@ public class RechargeService {
             throw new RuntimeException("Invalid Operator or Plan");
         }
 
-        Recharge recharge = new Recharge(
-                userId,
-                operator.getId(),
-                plan.getId(),
-                request.getMobileNumber(),
-                plan.getAmount(),
-                "PENDING"
-        );
+        Recharge recharge = Recharge.builder()
+                .userId(userId)
+                .operatorId(operator.getId())
+                .planId(plan.getId())
+                .mobileNumber(request.getMobileNumber())
+                .amount(plan.getAmount())
+                .status("PENDING")
+                .build();
         recharge = rechargeRepository.save(recharge);
 
         recharge = rechargeRepository.save(recharge);
