@@ -20,7 +20,7 @@ export class AuthService {
       tap(res => {
         if (res.token !== 'OTP_SENT') {
           this.saveSession(res);
-        }ng 
+        }
       })
     );
   }
