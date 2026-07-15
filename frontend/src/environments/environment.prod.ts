@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:8989'
+  apiUrl: 'https://gateway-service-jaem.onrender.com',
+  razorpayKey: 'rzp_test_SjDyGut7P6FuG0'
 };
