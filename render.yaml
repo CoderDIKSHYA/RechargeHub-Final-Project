@@ -6,7 +6,7 @@ services:
     ipAllowList: [] # Access restricted only to internal services
 
   # 2. Zipkin Tracing Service
-  - type: pserv
+  - type: web
     name: zipkin
     env: image
     image:
@@ -14,7 +14,7 @@ services:
     plan: free
 
   # 3. Eureka Discovery Server
-  - type: pserv
+  - type: web
     name: eureka-server
     env: docker
     dockerContext: backend/eureka-server
@@ -40,7 +40,7 @@ services:
         sync: false # Set in Render Dashboard
 
   # 5. User Service
-  - type: pserv
+  - type: web
     name: user-service
     env: docker
     dockerContext: backend/user-service
@@ -75,7 +75,7 @@ services:
         sync: false # Set in Render Dashboard
 
   # 6. Operator Service
-  - type: pserv
+  - type: web
     name: operator-service
     env: docker
     dockerContext: backend/operator-service
@@ -110,7 +110,7 @@ services:
         sync: false # Set in Render Dashboard
 
   # 7. Payment Service
-  - type: pserv
+  - type: web
     name: payment-service
     env: docker
     dockerContext: backend/payment-service
@@ -143,7 +143,7 @@ services:
         sync: false # Set in Render Dashboard
 
   # 8. Notification Service
-  - type: pserv
+  - type: web
     name: notification-service
     env: docker
     dockerContext: backend/notification-service
@@ -176,7 +176,7 @@ services:
         sync: false # Set in Render Dashboard (your Gmail App Password)
 
   # 9. Recharge Service
-  - type: pserv
+  - type: web
     name: recharge-service
     env: docker
     dockerContext: backend/recharge-service
