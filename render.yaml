@@ -9,9 +9,9 @@ services:
   - type: pserv
     name: zipkin
     env: image
-    image: openzipkin/zipkin:latest
+    image:
+      url: docker.io/openzipkin/zipkin:latest
     plan: free
-    port: 9411
 
   # 3. Eureka Discovery Server
   - type: pserv
@@ -20,7 +20,6 @@ services:
     dockerContext: backend/eureka-server
     dockerfilePath: backend/eureka-server/Dockerfile
     plan: free
-    port: 8761
     envVars:
       - key: EUREKA_SERVER_URL
         value: http://eureka-server:8761/eureka/
@@ -32,7 +31,6 @@ services:
     dockerContext: backend/gatewayservice
     dockerfilePath: backend/gatewayservice/Dockerfile
     plan: free
-    port: 8989
     envVars:
       - key: EUREKA_SERVER_URL
         value: http://eureka-server:8761/eureka/
@@ -48,7 +46,6 @@ services:
     dockerContext: backend/user-service
     dockerfilePath: backend/user-service/Dockerfile
     plan: free
-    port: 8082
     envVars:
       - key: SPRING_DATASOURCE_URL
         value: jdbc:mysql://mysql-14adf53c-runuwaldikshya-a4b8.h.aivencloud.com:24607/rechargerhub_users?useSSL=true&trustServerCertificate=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
@@ -84,7 +81,6 @@ services:
     dockerContext: backend/operator-service
     dockerfilePath: backend/operator-service/Dockerfile
     plan: free
-    port: 8083
     envVars:
       - key: SPRING_DATASOURCE_URL
         value: jdbc:mysql://mysql-14adf53c-runuwaldikshya-a4b8.h.aivencloud.com:24607/rechargerhub_operators?useSSL=true&trustServerCertificate=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
@@ -120,7 +116,6 @@ services:
     dockerContext: backend/payment-service
     dockerfilePath: backend/payment-service/Dockerfile
     plan: free
-    port: 8084
     envVars:
       - key: SPRING_DATASOURCE_URL
         value: jdbc:mysql://mysql-14adf53c-runuwaldikshya-a4b8.h.aivencloud.com:24607/rechargerhub_payments?useSSL=true&trustServerCertificate=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
@@ -154,7 +149,6 @@ services:
     dockerContext: backend/notification-service
     dockerfilePath: backend/notification-service/Dockerfile
     plan: free
-    port: 8085
     envVars:
       - key: SPRING_DATASOURCE_URL
         value: jdbc:mysql://mysql-14adf53c-runuwaldikshya-a4b8.h.aivencloud.com:24607/rechargerhub_notifications?useSSL=true&trustServerCertificate=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
@@ -188,7 +182,6 @@ services:
     dockerContext: backend/recharge-service
     dockerfilePath: backend/recharge-service/Dockerfile
     plan: free
-    port: 8086
     envVars:
       - key: SPRING_DATASOURCE_URL
         value: jdbc:mysql://mysql-14adf53c-runuwaldikshya-a4b8.h.aivencloud.com:24607/rechargerhub_recharges?useSSL=true&trustServerCertificate=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
