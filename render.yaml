@@ -170,9 +170,9 @@ services:
         value: http://eureka-server:8761/eureka/
       - key: ZIPKIN_URL
         value: http://zipkin:9411/api/v2/spans
-      - key: SMTP_USERNAME
+      - key: SPRING_MAIL_USERNAME
         sync: false # Set in Render Dashboard (your Gmail)
-      - key: SMTP_PASSWORD
+      - key: SPRING_MAIL_PASSWORD
         sync: false # Set in Render Dashboard (your Gmail App Password)
 
   # 9. Recharge Service
