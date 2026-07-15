@@ -1,6 +1,8 @@
 envVarGroups:
   - name: rechargehub-shared-env
     envVars:
+      - key: JAVA_TOOL_OPTIONS
+        value: -Xmx350m -Xms200m -XX:MaxRAMPercentage=70.0 # Limit heap to 350MB to fit in 512MB RAM
       - key: SPRING_DATASOURCE_PASSWORD
         sync: false # Set only ONCE in the Render Environment Group Dashboard
       - key: CLOUDINARY_CLOUD_NAME
@@ -41,6 +43,8 @@ services:
     dockerfilePath: backend/eureka-server/Dockerfile
     plan: free
     envVars:
+      - key: JAVA_TOOL_OPTIONS
+        value: -Xmx350m -Xms200m -XX:MaxRAMPercentage=70.0
       - key: EUREKA_SERVER_URL
         value: http://eureka-server:8761/eureka/
 
@@ -52,6 +56,8 @@ services:
     dockerfilePath: backend/gatewayservice/Dockerfile
     plan: free
     envVars:
+      - key: JAVA_TOOL_OPTIONS
+        value: -Xmx350m -Xms200m -XX:MaxRAMPercentage=70.0
       - key: EUREKA_SERVER_URL
         value: http://eureka-server:8761/eureka/
       - key: ZIPKIN_URL
