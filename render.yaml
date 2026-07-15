@@ -1,3 +1,23 @@
+envGroups:
+  - name: rechargehub-shared-env
+    envVars:
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false # Set only ONCE in the Render Environment Group Dashboard
+      - key: CLOUDINARY_CLOUD_NAME
+        value: dv2njgzci
+      - key: CLOUDINARY_API_KEY
+        value: "424119237126248"
+      - key: CLOUDINARY_API_SECRET
+        value: at76aIg2PA7LB6IFedYnVUs-jy4
+      - key: RAZORPAY_KEY_ID
+        value: rzp_test_SjDyGut7P6FuG0
+      - key: RAZORPAY_KEY_SECRET
+        value: 3xLEeuqDJuLfNO8t32LXndn1
+      - key: SPRING_MAIL_USERNAME
+        value: runwalvlogging@gmail.com
+      - key: SPRING_MAIL_PASSWORD
+        value: fgbogmsphjkffijx
+
 services:
   # 1. Redis Cache Service (Key-Value)
   - type: keyvalue
@@ -37,7 +57,7 @@ services:
       - key: ZIPKIN_URL
         value: http://zipkin:9411/api/v2/spans
       - key: JWT_SECRET
-        sync: false # Set in Render Dashboard
+        value: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
 
   # 5. User Service
   - type: web
@@ -47,12 +67,11 @@ services:
     dockerfilePath: backend/user-service/Dockerfile
     plan: free
     envVars:
+      - fromGroup: rechargehub-shared-env
       - key: SPRING_DATASOURCE_URL
         value: jdbc:mysql://mysql-14adf53c-runuwaldikshya-a4b8.h.aivencloud.com:24607/rechargerhub_users?useSSL=true&trustServerCertificate=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
       - key: SPRING_DATASOURCE_USERNAME
         value: avnadmin
-      - key: SPRING_DATASOURCE_PASSWORD
-        sync: false # Set in Render Dashboard (your Aiven password)
       - key: SPRING_DATA_REDIS_HOST
         fromService:
           name: redis
@@ -67,12 +86,6 @@ services:
         value: http://eureka-server:8761/eureka/
       - key: ZIPKIN_URL
         value: http://zipkin:9411/api/v2/spans
-      - key: CLOUDINARY_CLOUD_NAME
-        sync: false # Set in Render Dashboard
-      - key: CLOUDINARY_API_KEY
-        sync: false # Set in Render Dashboard
-      - key: CLOUDINARY_API_SECRET
-        sync: false # Set in Render Dashboard
 
   # 6. Operator Service
   - type: web
@@ -82,12 +95,11 @@ services:
     dockerfilePath: backend/operator-service/Dockerfile
     plan: free
     envVars:
+      - fromGroup: rechargehub-shared-env
       - key: SPRING_DATASOURCE_URL
         value: jdbc:mysql://mysql-14adf53c-runuwaldikshya-a4b8.h.aivencloud.com:24607/rechargerhub_operators?useSSL=true&trustServerCertificate=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
       - key: SPRING_DATASOURCE_USERNAME
         value: avnadmin
-      - key: SPRING_DATASOURCE_PASSWORD
-        sync: false # Set in Render Dashboard (your Aiven password)
       - key: SPRING_DATA_REDIS_HOST
         fromService:
           name: redis
@@ -102,12 +114,6 @@ services:
         value: http://eureka-server:8761/eureka/
       - key: ZIPKIN_URL
         value: http://zipkin:9411/api/v2/spans
-      - key: CLOUDINARY_CLOUD_NAME
-        sync: false # Set in Render Dashboard
-      - key: CLOUDINARY_API_KEY
-        sync: false # Set in Render Dashboard
-      - key: CLOUDINARY_API_SECRET
-        sync: false # Set in Render Dashboard
 
   # 7. Payment Service
   - type: web
@@ -117,12 +123,11 @@ services:
     dockerfilePath: backend/payment-service/Dockerfile
     plan: free
     envVars:
+      - fromGroup: rechargehub-shared-env
       - key: SPRING_DATASOURCE_URL
         value: jdbc:mysql://mysql-14adf53c-runuwaldikshya-a4b8.h.aivencloud.com:24607/rechargerhub_payments?useSSL=true&trustServerCertificate=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
       - key: SPRING_DATASOURCE_USERNAME
         value: avnadmin
-      - key: SPRING_DATASOURCE_PASSWORD
-        sync: false # Set in Render Dashboard (your Aiven password)
       - key: SPRING_RABBITMQ_HOST
         value: puffin.rmq2.cloudamqp.com
       - key: SPRING_RABBITMQ_PORT
@@ -137,10 +142,6 @@ services:
         value: http://eureka-server:8761/eureka/
       - key: ZIPKIN_URL
         value: http://zipkin:9411/api/v2/spans
-      - key: RAZORPAY_KEY_ID
-        sync: false # Set in Render Dashboard
-      - key: RAZORPAY_KEY_SECRET
-        sync: false # Set in Render Dashboard
 
   # 8. Notification Service
   - type: web
@@ -150,12 +151,11 @@ services:
     dockerfilePath: backend/notification-service/Dockerfile
     plan: free
     envVars:
+      - fromGroup: rechargehub-shared-env
       - key: SPRING_DATASOURCE_URL
         value: jdbc:mysql://mysql-14adf53c-runuwaldikshya-a4b8.h.aivencloud.com:24607/rechargerhub_notifications?useSSL=true&trustServerCertificate=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
       - key: SPRING_DATASOURCE_USERNAME
         value: avnadmin
-      - key: SPRING_DATASOURCE_PASSWORD
-        sync: false # Set in Render Dashboard (your Aiven password)
       - key: SPRING_RABBITMQ_HOST
         value: puffin.rmq2.cloudamqp.com
       - key: SPRING_RABBITMQ_PORT
@@ -170,10 +170,6 @@ services:
         value: http://eureka-server:8761/eureka/
       - key: ZIPKIN_URL
         value: http://zipkin:9411/api/v2/spans
-      - key: SPRING_MAIL_USERNAME
-        sync: false # Set in Render Dashboard (your Gmail)
-      - key: SPRING_MAIL_PASSWORD
-        sync: false # Set in Render Dashboard (your Gmail App Password)
 
   # 9. Recharge Service
   - type: web
@@ -183,12 +179,11 @@ services:
     dockerfilePath: backend/recharge-service/Dockerfile
     plan: free
     envVars:
+      - fromGroup: rechargehub-shared-env
       - key: SPRING_DATASOURCE_URL
         value: jdbc:mysql://mysql-14adf53c-runuwaldikshya-a4b8.h.aivencloud.com:24607/rechargerhub_recharges?useSSL=true&trustServerCertificate=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
       - key: SPRING_DATASOURCE_USERNAME
         value: avnadmin
-      - key: SPRING_DATASOURCE_PASSWORD
-        sync: false # Set in Render Dashboard (your Aiven password)
       - key: EUREKA_SERVER_URL
         value: http://eureka-server:8761/eureka/
       - key: ZIPKIN_URL
