@@ -3,6 +3,8 @@ envVarGroups:
     envVars:
       - key: JAVA_TOOL_OPTIONS
         value: -Xmx350m -Xms200m -XX:MaxRAMPercentage=70.0 # Limit heap to 350MB to fit in 512MB RAM
+      - key: SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE
+        value: "2" # Restrict each microservice to only 2 DB connections (total 10) to stay within Aiven Free limits
       - key: SPRING_DATASOURCE_PASSWORD
         sync: false # Set only ONCE in the Render Environment Group Dashboard
       - key: CLOUDINARY_CLOUD_NAME
