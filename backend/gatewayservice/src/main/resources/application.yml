@@ -10,10 +10,9 @@ spring:
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins: 
-              - "http://localhost:4200"
-              - "http://localhost:57285"
-              - "http://localhost:3000"
+            allowedOriginPatterns: 
+              - "http://localhost:*"
+              - "https://*.vercel.app"
             allowedMethods:
               - GET
               - POST
